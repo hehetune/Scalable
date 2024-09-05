@@ -1,3 +1,5 @@
+using System;
+using Input;
 using UnityEngine;
 
 namespace Character
@@ -11,12 +13,26 @@ namespace Character
         public float deceleration = 5f;
         public float jumpForce = 5f;
         public float gravity = -9.81f;
+        public float fallGravityMultiply = 2f;
 
         private CharacterController controller;
         private Vector3 velocity;
         private Vector3 targetDirection;
         private float currentSpeed = 0f;
         private bool isGrounded;
+
+        private Vector2 moveInput => GameInput.Instance.CharacterMovement;
+        private bool jumpPressed = false; 
+        
+        private void OnEnable()
+        {
+            GameInput.Instance.OnJumpAction += OnJumpEvent;
+        }
+
+        private void OnDisable()
+        {
+            GameInput.Instance.OnJumpAction -= OnJumpEvent;
+        }
 
         void Start()
         {
@@ -27,13 +43,8 @@ namespace Character
         {
             isGrounded = controller.isGrounded;
 
-            // Get input
-            float inputHorizontal = Input.GetAxis("Horizontal");
-            float inputVertical = Input.GetAxis("Vertical");
-            bool jump = Input.GetButtonDown("Jump");
-
             // Calculate target direction
-            targetDirection = new Vector3(inputHorizontal, 0f, inputVertical).normalized;
+            targetDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
 
             // Acceleration and Deceleration
             if (targetDirection.magnitude >= 0.1f)
@@ -51,17 +62,18 @@ namespace Character
             }
 
             // Apply movement
-            Vector3 move = transform.forward * currentSpeed;
+            Vector3 move = targetDirection * currentSpeed;
             controller.Move(move * Time.deltaTime);
 
             // Handle jumping
-            if (isGrounded && jump)
+            if (isGrounded && jumpPressed)
             {
                 velocity.y = Mathf.Sqrt(jumpForce * -2f * gravity);
+                jumpPressed = false;
             }
 
             // Apply gravity
-            velocity.y += gravity * Time.deltaTime;
+            velocity.y += gravity * fallGravityMultiply * Time.deltaTime;
 
             // Apply vertical movement
             controller.Move(velocity * Time.deltaTime);
@@ -71,6 +83,11 @@ namespace Character
             {
                 velocity.y = -2f; // Slightly negative to keep the character grounded
             }
+        }
+        
+        private void OnJumpEvent(object sender, EventArgs e)
+        {
+            jumpPressed = true;
         }
     }
 }
