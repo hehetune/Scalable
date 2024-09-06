@@ -1,9 +1,8 @@
 ﻿using System;
 using UnityCommunity.UnitySingleton;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-namespace Input
+namespace GameCore
 {
     public class GameInput : MonoSingleton<GameInput>
     {
@@ -12,6 +11,8 @@ namespace Input
         public event EventHandler OnPauseAction;
 
         public event EventHandler OnJumpAction;
+        public event EventHandler OnMouseLeftAction;
+        public event EventHandler OnMouseRightAction;
         public Vector2 CharacterMovement => playerInputActions.GameInput.Move.ReadValue<Vector2>();
         private PlayerInputActions playerInputActions;
 
@@ -21,6 +22,8 @@ namespace Input
             playerInputActions.GameInput.Enable();
             playerInputActions.GameInput.Pause.performed += Pause_performed;
             playerInputActions.GameInput.Jump.performed += Jump_performed;
+            playerInputActions.GameInput.MouseLeft.performed += MouseLeft_performed;
+            playerInputActions.GameInput.MouseRight.performed += MouseRight_performed;
         }
 
         private void OnDestroy()
@@ -29,6 +32,8 @@ namespace Input
             {
                 playerInputActions.GameInput.Pause.performed -= Pause_performed;
                 playerInputActions.GameInput.Jump.performed -= Jump_performed;
+                playerInputActions.GameInput.MouseLeft.performed -= MouseLeft_performed;
+                playerInputActions.GameInput.MouseRight.performed -= MouseRight_performed;
                 playerInputActions.Dispose();
             }
         }
@@ -46,6 +51,16 @@ namespace Input
         private void Jump_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             OnJumpAction?.Invoke(this, EventArgs.Empty);
+        }
+        
+        private void MouseLeft_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            OnMouseLeftAction?.Invoke(this, EventArgs.Empty);
+        }
+        
+        private void MouseRight_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            OnMouseRightAction?.Invoke(this, EventArgs.Empty);
         }
     }
 }

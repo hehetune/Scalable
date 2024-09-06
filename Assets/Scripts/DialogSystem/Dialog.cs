@@ -1,23 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using Input;
+using GameCore;
 using UnityEngine;
 
 namespace DialogSystem
 {
-    [Serializable]
-    public class DialogMessages
+    public class Dialog : MonoBehaviour
     {
-        public List<string> messages;
-    }
-    public abstract class Dialog : MonoBehaviour
-    {
-        // private const float INTERACT_DISTANCE = 5f;
-        public abstract void Interact();
-
         private Transform _playerTransform;
 
-        public List<DialogMessages> dialogs = new();
+        public List<DialogText> dialogs = new();
 
         private void OnEnable()
         {
@@ -31,17 +23,17 @@ namespace DialogSystem
 
         private void OnContinueDialog(object o, EventArgs e)
         {
-            Interact();
+            
         }
         
         private void OnTriggerEnter(Collider other)
         {
-            
+            Interact();
         }
 
-        // private bool IsWithinInteractDistance()
-        // {
-        //     return Vector3.Distance(_playerTransform.position, transform.position) < INTERACT_DISTANCE;
-        // }
+        private void Interact()
+        {
+            
+        }
     }
 }

@@ -1,5 +1,5 @@
 using System;
-using Input;
+using GameCore;
 using UnityEngine;
 
 namespace Character
