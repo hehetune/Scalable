@@ -9,17 +9,21 @@ namespace DialogSystem
         [SerializeField] private TextMeshProUGUI npcNameText;
         [SerializeField] private TextMeshProUGUI dialogText;
 
-        private Queue<string> paragraphs = new();
-        
-        public void InitializeDialog(DialogText dialogText)
+        public void DisplayMessage(string text)
         {
-            paragraphs.Clear();
-            foreach (var msg in dialogText.paragraphs)
-            {
-                paragraphs.Enqueue(msg);
-            }
+            
         }
-        
-        
+
+        public void OpenDialogUI(string speakerName)
+        {
+            npcNameText.text = speakerName;
+            gameObject.SetActive(true);
+        }
+
+        public void CloseDialogUI()
+        {
+            gameObject.SetActive(false);
+        }
+
     }
 }

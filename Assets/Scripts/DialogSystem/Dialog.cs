@@ -1,39 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GameCore;
+using UnityCommunity.UnitySingleton;
 using UnityEngine;
 
 namespace DialogSystem
 {
-    public class Dialog : MonoBehaviour
+    public class Dialog : MonoSingleton<Dialog>
     {
         private Transform _playerTransform;
 
-        public List<DialogText> dialogs = new();
+        private DialogSO _dialogSO;
 
-        private void OnEnable()
+        private int _currentMessageIndex = 0;
+
+        [SerializeField] private DialogUI _dialogUI;
+
+        private Action _onComplete;
+
+        public void OpenDialog(DialogSO dialogSO, Action onComplete)
         {
+            this._dialogSO = dialogSO;
+            this._onComplete += onComplete;
+            _dialogUI.OpenDialogUI(_dialogSO.speakerName);
             GameInput.Instance.OnJumpAction += OnContinueDialog;
+            ShowNextMessage();
         }
 
-        private void OnDisable()
+        private void CloseDialog()
         {
             GameInput.Instance.OnJumpAction -= OnContinueDialog;
+            _dialogUI.CloseDialogUI();
+            this._onComplete = null;
         }
 
         private void OnContinueDialog(object o, EventArgs e)
         {
-            
-        }
-        
-        private void OnTriggerEnter(Collider other)
-        {
-            Interact();
+            ShowNextMessage();
         }
 
-        private void Interact()
+        private void ShowNextMessage()
         {
-            
+            if (_currentMessageIndex == _dialogSO.paragraphs.Length)
+            {
+                _onComplete?.Invoke();
+                CloseDialog();
+                return;
+            }
+
+            _currentMessageIndex++;
+            _dialogUI.DisplayMessage(_dialogSO.paragraphs[_currentMessageIndex]);
         }
     }
 }

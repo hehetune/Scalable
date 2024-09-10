@@ -1,7 +1,8 @@
 ﻿namespace DialogSystem
 {
-    public abstract class IInteractable
+    public interface IInteractable
     {
-        public void Interact() {}
+        void OnPlayerEnter();
+        void OnPlayerExit();
     }
 }

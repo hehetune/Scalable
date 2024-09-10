@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace DialogSystem
 {
+    [Serializable]
     [CreateAssetMenu(menuName = "Dialog/Create DialogText")]
-    public class DialogText : ScriptableObject
+    public class DialogSO : ScriptableObject
     {
         public string speakerName;
         [TextArea(5, 10)]

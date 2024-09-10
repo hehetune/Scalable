@@ -10,10 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97c053f87931423abe39411b3e4241bb, type: 3}
-  m_Name: Lv0_Tut
+  m_Name: Lv0_AfterTut
   m_EditorClassIdentifier: 
   speakerName: PingPing
   paragraphs:
-  - Hello
-  - I am PingPing
-  - Nice to meet you!
+  - Hi
+  - Hehe

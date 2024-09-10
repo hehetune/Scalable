@@ -2,6 +2,6 @@
 {
     public interface Italkable
     {
-        public void Talk(DialogText dialogText);
+        public void Talk(DialogSO dialogSo);
     }
 }
